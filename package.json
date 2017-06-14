@@ -5,6 +5,7 @@
   "private": true,
   "dependencies": {
     "egg": "^1.2.1",
+    "lodash": "^4.17.4",
     "stream-wormhole": "^1.0.3",
     "wechat4u": "^0.7.3"
   },

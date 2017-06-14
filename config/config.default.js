@@ -1,5 +1,7 @@
 'use strict';
 
+const tokens = require('./tokens');
+
 module.exports = appInfo => {
   const config = {};
 
@@ -12,6 +14,8 @@ module.exports = appInfo => {
       enable: false,
     },
   };
+
+  Object.assign(config, tokens);
 
   return config;
 };
