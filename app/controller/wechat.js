@@ -66,6 +66,33 @@ module.exports = app => {
       ctx.body = result;
     }
 
+    * sendFileThroughLink() {
+      const { ctx } = this;
+      const { request: { body } } = ctx;
+      const groupIds = yield ctx.service.wechat.getFilteredGroupIds();
+      const results = [];
+
+      const fileResponse = yield ctx.curl(body.fileUrl, { streaming: true, timeout: [ 10000, 300000 ] });
+
+      if (fileResponse.status !== 200) {
+        ctx.throw(502, `Image downloads failed ${body.fileUrl}`);
+      }
+
+      const fileStream = fileResponse.res;
+
+      for (const groupId of groupIds) {
+        try {
+          const result = yield app.wechatBot.sendMsg({ file: fileStream, filename: body.filename }, groupId);
+          results.push(result);
+        } catch (err) {
+          app.logger.error(err);
+          throw err;
+        }
+      }
+
+      ctx.body = results;
+    }
+
     * getContact() {
       const { ctx } = this;
       ctx.body = yield ctx.service.wechat.getContact();

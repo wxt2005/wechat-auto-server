@@ -6,4 +6,5 @@ module.exports = app => {
   app.get('/stop', 'wechat.stop');
   app.get('/contact', 'wechat.getContact');
   app.post('/message', 'wechat.send');
+  app.post('/message_file', 'wechat.sendFileThroughLink');
 };

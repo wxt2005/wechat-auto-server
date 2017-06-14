@@ -14,6 +14,7 @@
     "autod-egg": "^1.0.0",
     "egg-bin": "^3.3.2",
     "egg-ci": "^1.6.0",
+    "egg-development-proxyagent": "^1.0.0",
     "egg-mock": "^3.5.0",
     "eslint": "^3.19.0",
     "eslint-config-egg": "^4.1.0",
