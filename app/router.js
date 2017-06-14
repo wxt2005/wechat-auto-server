@@ -1,7 +1,9 @@
 'use strict';
 
 module.exports = app => {
-  app.get('/', 'home.index');
-  app.get('/contact', 'home.getContact');
-  app.post('/message', 'home.send');
+  app.get('/start', 'wechat.start');
+  app.get('/status', 'wechat.status');
+  app.get('/stop', 'wechat.stop');
+  app.get('/contact', 'wechat.getContact');
+  app.post('/message', 'wechat.send');
 };

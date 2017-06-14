@@ -3,9 +3,31 @@
 // const sendToWormhole = require('stream-wormhole');
 
 module.exports = app => {
-  class HomeController extends app.Controller {
-    * index() {
-      this.ctx.body = 'hi, egg';
+  class WechatController extends app.Controller {
+    * start() {
+      const { ctx } = this;
+      const uuid = yield ctx.service.wechat.start();
+
+      ctx.body = {
+        qrcode: `https://login.weixin.qq.com/qrcode/${uuid}`,
+      };
+    }
+
+    * status() {
+      const { ctx } = this;
+      ctx.body = {
+        status: app.wechatBot.state,
+      };
+    }
+
+    * stop() {
+      const { ctx } = this;
+
+      const result = yield ctx.service.wechat.stop();
+
+      ctx.body = {
+        success: result,
+      };
     }
 
     * send() {
@@ -32,7 +54,7 @@ module.exports = app => {
 
           for (const groupId of groupIds) {
             try {
-              result = yield app.bot.sendMsg({ file: part, filename: part.filename }, groupId);
+              result = yield app.wechatBot.sendMsg({ file: part, filename: part.filename }, groupId);
             } catch (err) {
               app.logger.error(err);
               // throw err;
@@ -49,5 +71,5 @@ module.exports = app => {
       ctx.body = yield ctx.service.wechat.getContact();
     }
   }
-  return HomeController;
+  return WechatController;
 };

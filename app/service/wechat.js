@@ -2,12 +2,36 @@
 
 module.exports = app => {
   class WechatService extends app.Service {
+    * start() {
+      const { wechatBot } = app;
+
+      wechatBot.start();
+
+      return new Promise(resolve => {
+        wechatBot.once('uuid', uuid => {
+          resolve(uuid);
+        });
+      });
+    }
+
+    * stop() {
+      const { wechatBot } = app;
+
+      wechatBot.stop();
+
+      return new Promise(resolve => {
+        wechatBot.once('logout', () => {
+          resolve(true);
+        });
+      });
+    }
+
     * getContact() {
-      return app.bot.contacts;
+      return app.wechatBot.contacts;
     }
 
     * getFilteredGroupIds() {
-      const contacts = app.bot.contacts;
+      const contacts = app.wechatBot.contacts;
       const results = [];
 
       Object.keys(contacts).forEach(id => {
