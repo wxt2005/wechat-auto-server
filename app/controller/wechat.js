@@ -30,6 +30,16 @@ module.exports = app => {
       };
     }
 
+    * restart() {
+      const { ctx } = this;
+
+      yield ctx.service.wechat.restart();
+
+      ctx.body = {
+        success: true,
+      };
+    }
+
     * send() {
       const { ctx } = this;
 

@@ -26,6 +26,12 @@ module.exports = app => {
       });
     }
 
+    * restart() {
+      const { wechatBot } = app;
+
+      wechatBot.restart();
+    }
+
     * getContact() {
       return app.wechatBot.contacts;
     }

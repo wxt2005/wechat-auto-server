@@ -1,5 +1,6 @@
 'use strict';
 
+const path = require('path');
 const tokens = require('./tokens');
 
 module.exports = appInfo => {
@@ -14,6 +15,9 @@ module.exports = appInfo => {
       enable: false,
     },
   };
+
+  // bot save path
+  config.botInfoFilePath = path.join(__dirname, '../bot.json');
 
   Object.assign(config, tokens);
 
