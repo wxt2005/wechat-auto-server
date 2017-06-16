@@ -83,6 +83,13 @@ module.exports = app => {
       const results = [];
       const { fileUrl, filename } = body;
 
+      // Do not support pixiv ugoira yet
+      if (/ugoira/i.test(fileUrl)) {
+        this.body = [];
+
+        return;
+      }
+
       let headers = {};
 
       // pixiv referrer
