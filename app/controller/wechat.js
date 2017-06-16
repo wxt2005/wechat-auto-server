@@ -81,18 +81,32 @@ module.exports = app => {
       const { request: { body } } = ctx;
       const groupIds = yield ctx.service.wechat.getFilteredGroupIds();
       const results = [];
+      const { fileUrl, filename } = body;
 
-      const fileResponse = yield ctx.curl(body.fileUrl, { streaming: true, timeout: [ 10000, 300000 ] });
+      let headers = {};
+
+      // pixiv referrer
+      if (/pximg/i.test(fileUrl)) {
+        headers = {
+          Referer: 'https://www.pixiv.net/',
+        };
+      }
+
+      const fileResponse = yield ctx.curl(fileUrl, {
+        streaming: true,
+        timeout: [ 10000, 300000 ],
+        headers,
+      });
 
       if (fileResponse.status !== 200) {
-        ctx.throw(502, `Image downloads failed ${body.fileUrl}`);
+        ctx.throw(502, `Image downloads failed: ${fileUrl}`);
       }
 
       const fileStream = fileResponse.res;
 
       for (const groupId of groupIds) {
         try {
-          const result = yield app.wechatBot.sendMsg({ file: fileStream, filename: body.filename }, groupId);
+          const result = yield app.wechatBot.sendMsg({ file: fileStream, filename }, groupId);
           results.push(result);
         } catch (err) {
           app.logger.error(err);
